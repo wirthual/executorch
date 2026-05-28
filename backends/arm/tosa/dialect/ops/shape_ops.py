@@ -9,7 +9,7 @@ import sympy  # type: ignore[import-untyped]
 import torch
 
 from executorch.backends.arm.tosa.dialect.lib import TosaValueError
-from executorch.backends.arm.tosa.dialect.ops_registration import register_fake_tosa_op
+from executorch.backends.arm.tosa.dialect.ops_registration import register_tosa_op
 
 from executorch.backends.arm.tosa.specification import (
     get_context_shape_env,
@@ -20,7 +20,7 @@ from torch.types import IntLikeType
 from torch.utils._sympy.functions import FloorDiv
 
 
-@register_fake_tosa_op(
+@register_tosa_op(
     "CONST_SHAPE(int[] shape) -> int[]",  # schema
     TosaSpecification.all_versions_and_profiles(),
 )
@@ -30,7 +30,7 @@ def CONST_SHAPE(shape: list[int]) -> list[int]:
     return shape
 
 
-@register_fake_tosa_op(
+@register_tosa_op(
     "DIM(Tensor input, *, int axis) -> SymInt[]",  # schema
     TosaSpecification.all_profiles_for_version("1.1"),
 )
@@ -91,7 +91,7 @@ def _combine_shapes(
     return result
 
 
-@register_fake_tosa_op(
+@register_tosa_op(
     "CONCAT_SHAPE(SymInt[][] shape_list) -> SymInt[]",  # schema (fixed to return SymInt[])
     TosaSpecification.all_profiles_for_version("1.1"),
 )
@@ -115,7 +115,7 @@ def CONCAT_SHAPE(
     return concat_shape
 
 
-@register_fake_tosa_op(
+@register_tosa_op(
     "ADD_SHAPE(SymInt[] shape1, SymInt[] shape2) -> SymInt[]",  # schema
     TosaSpecification.all_profiles_for_version("1.1"),
 )
@@ -129,7 +129,7 @@ def ADD_SHAPE(
     return _combine_shapes(shape1, shape2, lambda a, b: a + b)
 
 
-@register_fake_tosa_op(
+@register_tosa_op(
     "SUB_SHAPE(SymInt[] shape1, SymInt[] shape2) -> SymInt[]",  # schema
     TosaSpecification.all_profiles_for_version("1.1"),
 )
@@ -144,7 +144,7 @@ def SUB_SHAPE(
     return _combine_shapes(shape1, shape2, lambda a, b: a - b)
 
 
-@register_fake_tosa_op(
+@register_tosa_op(
     "DIV_FLOOR_SHAPE(SymInt[] shape1, SymInt[] shape2) -> SymInt[]",  # schema
     TosaSpecification.all_profiles_for_version("1.1"),
 )
@@ -158,7 +158,7 @@ def DIV_FLOOR_SHAPE(
     return _combine_shapes(shape1, shape2, lambda a, b: FloorDiv(a, b))
 
 
-@register_fake_tosa_op(
+@register_tosa_op(
     "MUL_SHAPE(SymInt[] shape1, SymInt[] shape2) -> SymInt[]",  # schema
     TosaSpecification.all_profiles_for_version("1.1"),
 )
@@ -173,7 +173,7 @@ def MUL_SHAPE(
     return _combine_shapes(shape1, shape2, lambda a, b: a * b)
 
 
-@register_fake_tosa_op(
+@register_tosa_op(
     "MOD_SHAPE(SymInt[] shape1, SymInt[] shape2) -> SymInt[]",  # schema
     TosaSpecification.all_profiles_for_version("1.1"),
 )

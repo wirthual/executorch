@@ -7,14 +7,14 @@ from typing import List, Union
 
 import torch
 from executorch.backends.arm.tosa.dialect.lib import TosaValueError
-from executorch.backends.arm.tosa.dialect.ops_registration import register_fake_tosa_op
+from executorch.backends.arm.tosa.dialect.ops_registration import register_tosa_op
 from executorch.backends.arm.tosa.specification import (
     get_context_spec,
     TosaSpecification,
 )
 
 
-@register_fake_tosa_op(
+@register_tosa_op(
     "MAX_POOL2D(Tensor input, int[2] kernel, int[2] stride, SymInt[4] pad) -> Tensor",
     TosaSpecification.all_versions_and_profiles(),
 )

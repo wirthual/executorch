@@ -49,7 +49,7 @@ class MaxPool2dWithEmptyStride(torch.nn.Module):
         return (torch.rand(1, 3, 8, 8),)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        return torch.nn.functional.max_pool2d(x, kernel_size=[2, 3], stride=[])
+        return torch.nn.functional.max_pool2d(x, kernel_size=[2, 2], stride=[])
 
 
 modules: Dict[str, ModuleWithInputs] = {
@@ -110,8 +110,7 @@ def test_rewrite_max_pool2d_tosa_empty_stride_uses_kernel_size() -> None:
         },
         pass_list=[RemoveGetItemPass, RewriteMaxPool2dPass],
     )
-    pipeline.pop_stage("run_method_and_compare_outputs")
     pipeline.run()
 
     tosa_node = _get_tosa_max_pool2d_node(pipeline)
-    assert tosa_node.args[2] == [2, 3]
+    assert tosa_node.args[2] == [2, 2]
